@@ -1,12 +1,35 @@
 plugins {
     kotlin("jvm") version "1.9.22"
+    `maven-publish`
 }
 
 group = "org.ivcode"
 version = "1.0-SNAPSHOT"
 
+java {
+    withSourcesJar()
+}
+
 repositories {
     mavenCentral()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+
+            from(components["java"])
+        }
+    }
+
+    repositories {
+        maven {
+            url = uri(layout.buildDirectory.dir("repo"))
+        }
+    }
 }
 
 dependencies {
